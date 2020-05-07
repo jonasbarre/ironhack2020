@@ -93,7 +93,7 @@ class App extends Component {
     console.log(findIndex)
 
     todaysFood.splice(findIndex, 1)
-    this.setState({todaysFood: todaysFood})
+    this.setState({todaysFood})
   }
 
   
