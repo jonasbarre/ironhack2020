@@ -4,11 +4,17 @@ import foods from './foods.json';
 import FoodBox from './components/Foodbox/FoodBox';
 import SearchBar from './components/SearchBar/SearchBar';
 import TodaysFood from "./components/TodaysFood/TodaysFood";
+import { v4 as uuidv4 } from 'uuid';
+
+const newFoods = foods.map(food => {
+  food['id'] = uuidv4() // food.id = uuidv4()
+  return food
+}) 
 
 class App extends Component {
   state = {
-    foods,
-    results: foods,
+    newFoods,
+    results: newFoods,
     formIsShowed:false,
     todaysFood: []
   }
@@ -48,14 +54,48 @@ class App extends Component {
     })
   }
 
-  addFood = (food) => {
-    const todaysFood = [...this.state.todaysFood, food]
+  // addFood = (food) => {
+  //   const todaysFood = [...this.state.todaysFood, food]
     
-    this.setState({
-      todaysFood: todaysFood 
-    })
+  // }
+
+  addFood = (food) => {
+    if (this.state.todaysFood.find(e => e.name === food.name)) {
+      const todaysFood = [...this.state.todaysFood]
+      todaysFood.find(f=>f.name.includes(food.name)).quantity++
+      console.log(todaysFood.find(f=>f.name.includes(food.name)).quantity)
+      this.setState({
+        todaysFood: todaysFood 
+      })
+    } else {
+      const todaysFood = [...this.state.todaysFood, food]
+    
+      this.setState({
+        todaysFood: todaysFood 
+      })
+    }
   }
   
+  quantityUpdate = (e, food) => {
+    //console.log('quantityUpdate', e.target, food.name)
+    const todaysFood = [...this.state.results]
+    console.log(todaysFood, e.target, food.name)
+    todaysFood.map(f => {
+      if (f.name === food.name) { f.quantity = e.target.value }
+      return f
+    })
+    this.setState({foods: todaysFood})
+  }
+
+  deleteFood = (foodId) => {
+    const todaysFood = [...this.state.todaysFood]
+    const findIndex = todaysFood.findIndex(f => f.id === foodId)
+    console.log(findIndex)
+
+    todaysFood.splice(findIndex, 1)
+    this.setState({todaysFood: todaysFood})
+  }
+
   
   render() {
     return (
@@ -97,16 +137,19 @@ class App extends Component {
         }
         {this.state.results.map((element, key) => 
          <FoodBox 
-           key={key}
+           key={element.id}
+           id={element.id}
            name={element.name}
            calories={element.calories}
            image={element.image}
            quantity={element.quantity}
            addFood={this.addFood}
+           quantityUpdate={this.quantityUpdate}
          />
         )}
         <TodaysFood 
           foodArray={this.state.todaysFood}
+          deleteFood={this.deleteFood}
         />
        
       </div>

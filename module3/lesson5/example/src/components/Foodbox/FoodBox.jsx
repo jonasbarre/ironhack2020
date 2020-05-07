@@ -4,9 +4,10 @@ export default function FoodBox(props) {
 
     const food = {
         name: props.name,
-        calories: props.calories,
+        calories: props.calories * props.quantity,
         quantity: props.quantity,
         image: props.image,
+        id: props.id
     }
     return (
         <div>
@@ -32,7 +33,7 @@ export default function FoodBox(props) {
                                     className="input"
                                     type="number" 
                                     value={props.quantity}
-                                    onChange={(e)=> props.quantityUpdate(e)}
+                                    onChange={(e) => props.quantityUpdate(e, food)}
                                 />
                             </div>
                             <div className="control">

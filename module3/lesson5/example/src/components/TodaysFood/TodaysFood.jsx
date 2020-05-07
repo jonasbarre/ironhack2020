@@ -11,6 +11,7 @@ export default function TodaysFood(props) {
                 <h2>Name: {food.name}</h2>
                 <p>Quantity: {food.quantity}</p>
                 <p>Calories: {food.calories}</p>
+                <button onClick={() => props.deleteFood(food.id)}>Delete {food.name}</button>
             </div>
         ))
     )
